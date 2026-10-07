@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f4f4f0">
+  <title>Pirata Proletário</title>
+  <meta name="description" content="Despatologizando o capitalismo. Saio às 5h e volto às 22h, mas não adoeço sozinho.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pirata Proletário">
+  <meta property="og:description" content="Despatologizando o capitalismo. Saio às 5h e volto às 22h, mas não adoeço sozinho.">
+  <meta property="og:url" content="https://david-ecarvalho.github.io/pirataproletario/">
+  <meta property="og:image" content="https://david-ecarvalho.github.io/pirataproletario/logo.png">
+  <meta property="og:image:alt" content="Logo do Divã Coletivo: metade engrenagem, metade cérebro">
+  <link rel="canonical" href="https://david-ecarvalho.github.io/pirataproletario/">
+  <link rel="icon" href="logo.png">
+
+  <!-- Fontes: Old Standard TT (livro de teoria do séc. XIX) e Courier Prime (máquina de escrever).
+       Sem internet, cai para Times New Roman / Courier New sem quebrar nada. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&amp;display=swap">
+
+  <style>
+    :root {
+      --papel: #f4f4f0;
+      --tinta: #1a1a1a;
+      --sangue: #8b0000;
+      --serifa: "Old Standard TT", "Times New Roman", Times, Georgia, serif;
+      --mono: "Courier Prime", "Courier New", Courier, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: var(--serifa);
+      line-height: 1.45;
+    }
+
+    ::selection { background: var(--sangue); color: var(--papel); }
+
+    /* Grão analógico: ruído SVG por cima de tudo, sem bloquear clique */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
+      z-index: 10;
+      pointer-events: none;
+      opacity: .16;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    .ficha {
+      width: 100%;
+      max-width: 30rem;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2.5rem;
+    }
+
+    /* Cabeçalho de prontuário */
+    .meta,
+    .rodape {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .meta {
+      margin-bottom: 1.75rem;
+      padding-bottom: .4rem;
+      border-bottom: 2px solid var(--tinta);
+    }
+
+    .avatar {
+      display: block;
+      width: 8rem;
+      height: 8rem;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      border: 3px solid var(--tinta);
+      background: var(--papel);
+      font-family: var(--mono);
+      font-size: .7rem;
+      box-shadow: 6px 6px 0 var(--sangue);
+    }
+
+    h1 {
+      margin: 0;
+      padding-bottom: .9rem;
+      border-bottom: 6px double var(--tinta);
+      font-size: clamp(2.6rem, 13vw, 3.75rem);
+      font-weight: 700;
+      line-height: .92;
+      letter-spacing: -.02em;
+      animation: imprimir .6s steps(6, end) both;
+    }
+
+    .subtitulo {
+      margin: 1rem 0 0;
+      font-size: 1.2rem;
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    .subtitulo__diagnostico {
+      display: block;
+      margin-bottom: .4rem;
+      color: var(--sangue);
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: .5em;
+      height: 1em;
+      margin-left: .2em;
+      vertical-align: -.15em;
+      background: var(--sangue);
+      animation: piscar 1s steps(1) infinite;
+    }
+
+    /* Lista de encaminhamentos */
+    .secao {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 400;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .secao::after {
+      content: "";
+      flex: 1;
+      border-top: 2px solid var(--tinta);
+    }
+
+    .links {
+      display: grid;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .links li { animation: carimbar .2s steps(2, end) both; }
+    .links li:nth-child(1) { animation-delay: .55s; }
+    .links li:nth-child(2) { animation-delay: .65s; }
+    .links li:nth-child(3) { animation-delay: .75s; }
+    .links li:nth-child(4) { animation-delay: .85s; }
+    .links li:nth-child(5) { animation-delay: .95s; }
+    .links li:nth-child(6) { animation-delay: 1.05s; }
+
+    .botao {
+      display: flex;
+      align-items: stretch;
+      min-height: 3.5rem;
+      border: 2px solid var(--tinta);
+      background: var(--papel);
+      color: var(--tinta);
+      box-shadow: 4px 4px 0 var(--tinta);
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.25;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .botao__icone {
+      display: flex;
+      flex: 0 0 3.25rem;
+      align-items: center;
+      justify-content: center;
+      border-right: 2px solid var(--tinta);
+      font-size: 1.15rem;
+    }
+
+    .botao__rotulo {
+      flex: 1;
+      align-self: center;
+      padding: .85rem .9rem;
+    }
+
+    .botao__seta {
+      align-self: center;
+      padding-right: .9rem;
+    }
+
+    .botao--destaque {
+      min-height: 4.25rem;
+      background: var(--sangue);
+      color: var(--papel);
+      font-size: 1.05rem;
+    }
+
+    .botao--escuro {
+      background: var(--tinta);
+      color: var(--papel);
+      box-shadow: 4px 4px 0 var(--sangue);
+    }
+
+    .botao--escuro .botao__icone { border-right-color: var(--papel); }
+
+    /* Inversão seca: sem transition, troca de cor no mesmo frame */
+    @media (hover: hover) {
+      .botao:hover { background: var(--sangue); color: var(--papel); }
+      .botao:hover .botao__seta { transform: translateX(4px); }
+      .botao--destaque:hover { background: var(--tinta); }
+      .botao--escuro:hover { box-shadow: 4px 4px 0 var(--tinta); }
+    }
+
+    .botao--escuro:focus-visible { box-shadow: 4px 4px 0 var(--tinta); }
+
+    .botao:focus-visible,
+    .botao:active { background: var(--sangue); color: var(--papel); }
+
+    .botao--destaque:focus-visible,
+    .botao--destaque:active { background: var(--tinta); }
+
+    .botao:focus-visible {
+      outline: 3px solid var(--sangue);
+      outline-offset: 5px;
+    }
+
+    .botao:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    .rodape {
+      margin-top: 3rem;
+      padding-top: .4rem;
+      border-top: 2px solid var(--tinta);
+    }
+
+    @keyframes imprimir {
+      from { clip-path: inset(0 100% 0 0); }
+      to   { clip-path: inset(0 0 0 0); }
+    }
+
+    @keyframes carimbar {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes piscar {
+      50% { opacity: 0; }
+    }
+
+    @media (min-width: 480px) {
+      .ficha { padding: 3rem 1.5rem 3.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="ficha">
+    <div class="meta">
+      <span>Ficha nº 001</span>
+      <span>Caso: coletivo</span>
+    </div>
+
+    <header>
+      <img class="avatar" src="logo.png" alt="Logo do Divã Coletivo: metade engrenagem, metade cérebro" width="128" height="128">
+      <h1>Pirata Proletário</h1>
+      <p class="subtitulo">
+        <span class="subtitulo__diagnostico">Despatologizando o capitalismo.</span>
+        Saio às 5h e volto às 22h, mas não adoeço sozinho.<span class="cursor" aria-hidden="true"></span>
+      </p>
+    </header>
+
+    <nav aria-labelledby="encaminhamentos">
+      <h2 class="secao" id="encaminhamentos">Encaminhamentos</h2>
+      <ul class="links">
+        <li>
+          <a class="botao botao--destaque" href="https://discord.gg/Ps2Aj9SMXk">
+            <span class="botao__icone" aria-hidden="true">🛋️</span>
+            <span class="botao__rotulo">O DIVÃ COLETIVO (Discord)</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="botao botao--escuro" href="https://discord.gg/uRaQYTDfPf">
+            <span class="botao__icone" aria-hidden="true">📚</span>
+            <span class="botao__rotulo">CLUBE DE LEITURA (Soviete de Estudos)</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="botao" href="https://www.youtube.com/@SintomadeClasse">
+            <span class="botao__icone" aria-hidden="true">🔴</span>
+            <span class="botao__rotulo">Inscreva-se no YouTube</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="botao" href="https://www.tiktok.com/@pirataproletario">
+            <span class="botao__icone" aria-hidden="true">📱</span>
+            <span class="botao__rotulo">TikTok</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <!-- Kwai: descomentar quando o perfil existir
+        <li>
+          <a class="botao" href="LINK_DO_KWAI">
+            <span class="botao__icone" aria-hidden="true">📱</span>
+            <span class="botao__rotulo">Kwai</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+        -->
+        <li>
+          <a class="botao" href="https://www.instagram.com/pirataproletario/">
+            <span class="botao__icone" aria-hidden="true">📷</span>
+            <span class="botao__rotulo">Instagram</span>
+            <span class="botao__seta" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <footer class="rodape">
+      <span>Pirata Proletário</span>
+      <span>Fim da ficha</span>
+    </footer>
+  </main>
+</body>
+</html>
